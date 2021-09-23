@@ -5,6 +5,11 @@ import datetime
 from sqlalchemy.orm import Session
 import models
 
+# タスク
+# - admin sdk の導入→@takapiro99
+# - 保存のところをちょっと変える→@takapiro99
+# - herokuにデプロイ
+# - githubとherokuのやつをslack又はdiscordと連携
 
 async def save_file(file: UploadFile) -> str:
     """
