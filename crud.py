@@ -3,7 +3,6 @@ import os
 import uuid
 import datetime
 from sqlalchemy.orm import Session
-import models
 
 # タスク
 # - 保存のところをちょっと変える→@takapiro99
@@ -11,6 +10,7 @@ import models
 # - githubとherokuのやつをslack又はdiscordと連携
 
 tmp_dir_name = "/tmp" if os.environ.get("DYNO") else "./tmp"
+
 
 async def save_file(file: UploadFile) -> str:
     """
@@ -30,29 +30,21 @@ async def save_file(file: UploadFile) -> str:
                 break
             fout.write(chunk)
         fout.close()
-        return f"/static/{filename}{ext}"
+        return path
     else:
         raise HTTPException(
             status_code=422, detail="\"image/png\" or \"image/jpeg\" のみ受け付けます")
 
 
-def get_all_posts(db: Session):
-    return db.query(models.Posts).all()
+def get_all_posts():
+    # TODO: 実装
+    return []
 
 
-async def create_post(db: Session, garigari_name: str, comment: str, lat: float, lng: float, image: UploadFile, genre: str):
-    image_path = await save_file(image)
-    db_post = models.Posts(
-        garigariname=garigari_name,
-        imagePath=image_path,
-        comment=comment,
-        lat=lat,
-        lng=lng,
-        genre=genre,
-        favorites=0,
-        createdAt=datetime.datetime.now(),
-    )
-    db.add(db_post)
-    db.commit()
-    db.refresh(db_post)
-    return db_post
+async def create_post(db, garigari_name: str, comment: str, lat: float, lng: float, image: UploadFile, genre: str):
+    tmp_path = await save_file(image)
+    print(tmp_path)
+    # TODO: cloud storage に upload
+    os.remove(tmp_path)
+    # TODO: 実装
+    return True

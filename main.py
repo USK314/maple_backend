@@ -3,8 +3,6 @@ from fastapi.responses import JSONResponse
 import uvicorn
 from sqlalchemy.orm import Session
 import crud
-import models
-from database import SessionLocal, engine
 from fastapi.staticfiles import StaticFiles
 from typing import List, Optional
 
@@ -20,22 +18,15 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="uploads"), name="static")
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @app.get("/")
 async def root():
     return {"message": "this is root"}
 
 
 @app.get("/posts")
-async def posts(db: Session = Depends(get_db)):
-    posts = crud.get_all_posts(db)
+async def posts():
+    # posts = crud.get_all_posts(db)
+    posts = []
     return {"message": "get all posts here", "data": posts}
 
 
@@ -47,9 +38,8 @@ async def post(
     lng: float = Form(...),
     image: UploadFile = File(...),
     genre: str = Form(...),
-    db: Session = Depends(get_db)
 ):
-    await crud.create_post(db, garigari_name, comment, lat, lng, image, genre)
+    await crud.create_post(None, garigari_name, comment, lat, lng, image, genre)
     return JSONResponse(content={"status": "ok"}, status_code=status.HTTP_201_CREATED)
 
 

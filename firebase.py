@@ -14,10 +14,5 @@ firebase_app = firebase_admin.initialize_app(cred, {
 
 
 bucket = storage.bucket()
+
 db = firestore.client()
-
-blobs = bucket.list_blobs()
-print(blobs)
-for blob in blobs:
-    print(blob.name)
-
