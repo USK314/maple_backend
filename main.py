@@ -8,23 +8,11 @@ from database import SessionLocal, engine
 from fastapi.staticfiles import StaticFiles
 from typing import List, Optional
 
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import storage
-from firebase_admin import firestore
+from firebase import bucket, db
 
-cred = credentials.Certificate("cert.json")
-
-firebase_admin.initialize_app(cred, {
-    'storageBucket': 'garigari-stagram.appspot.com',
-    'projectId': 'garigari-stagram',
-})
-
-bucket = storage.bucket()
-db = firestore.client()
-
-# TODO: cloud storage との接続
-# TODO: firestore との接続
+print(bucket, db)
+# TODO: cloud storage との連携
+# TODO: firestore との連携
 # TODO: 実装
 
 app = FastAPI()

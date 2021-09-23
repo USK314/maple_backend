@@ -6,10 +6,11 @@ from sqlalchemy.orm import Session
 import models
 
 # タスク
-# - admin sdk の導入→@takapiro99
 # - 保存のところをちょっと変える→@takapiro99
 # - herokuにデプロイ
 # - githubとherokuのやつをslack又はdiscordと連携
+
+tmp_dir_name = "/tmp" if os.environ.get("DYNO") else "./tmp"
 
 async def save_file(file: UploadFile) -> str:
     """
@@ -19,7 +20,7 @@ async def save_file(file: UploadFile) -> str:
     if file.content_type == "image/png" or file.content_type == "image/jpeg":
         filename = str(uuid.uuid4())
         _, ext = os.path.splitext(file.filename)
-        path = os.path.join("./uploads", f"{filename}{ext}")
+        path = os.path.join(tmp_dir_name, f"{filename}{ext}")
         # TODO: print はしない
         print(path)
         fout = open(path, 'wb')
