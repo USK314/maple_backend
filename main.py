@@ -15,8 +15,6 @@ print(bucket, db)
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="uploads"), name="static")
-
 
 @app.get("/")
 async def root():
