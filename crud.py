@@ -1,4 +1,4 @@
-from fastapi import UploadFile, HTTPException
+from fastapi import UploadFile, HTTPException, status
 import os
 from uuid import uuid4
 from firebase import bucket
@@ -37,7 +37,7 @@ async def save_file_to_cloud_storage(file: UploadFile) -> str:
         return public_url
     else:
         raise HTTPException(
-            status_code=422, detail="\"image/png\" or \"image/jpeg\" のみ受け付けます")
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="\"image/png\" or \"image/jpeg\" のみ受け付けます")
 
 
 async def get_all_posts():
@@ -63,3 +63,15 @@ async def create_post(garigari_name: str, comment: str, lat: float, lng: float, 
         'createdAt': firestore.SERVER_TIMESTAMP,
     })
     return True
+
+
+async def favorite_to_post(post_id: str):
+    doc_ref = db.collection("posts").document(post_id)
+    doc = doc_ref.get()
+    if not doc.exists:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="投稿が見つかりませんでした")
+    data = doc.to_dict()
+    current_favorites = data["favorites"]
+    # それを更新する
+    doc_ref.set({"favorites": current_favorites + 1}, merge=True)

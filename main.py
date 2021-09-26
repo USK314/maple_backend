@@ -26,23 +26,6 @@ app.add_middleware(
 async def root():
     return {"message": "this is root"}
 
-# {
-#     "status": "ok",
-#     "count": "<int>"
-#     "data": [
-#         {
-#             "id": "<int>"
-#             "garigariName": "<string>"
-#             "comment": "<string>"
-#             "lat": "<float>",
-#             "lng": "<float>",
-#             "photoUrl": "<string>",
-#             "genre": "<string>;(セミコロン区切りで複数対応も視野に入れて)"
-#             "favorites": "<int>"
-#         }...
-#     ]
-# }
-
 
 @app.get("/posts")
 async def posts():
@@ -69,8 +52,9 @@ async def post(
 
 
 @app.post("/favorite")
-async def favorite():
-    return {"message": "this is favorite"}
+async def favorite(post_id: str):
+    await crud.favorite_to_post(post_id)
+    return JSONResponse(content={"status": "ok"}, status_code=status.HTTP_204_NO_CONTENT)
 
 
 if __name__ == '__main__':
