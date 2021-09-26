@@ -1,6 +1,5 @@
 fastapi
 uvicorn
-sqlalchemy
 python-multipart
 aiofiles
 firebase-admin

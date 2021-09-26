@@ -1,19 +1,29 @@
 from fastapi import FastAPI, Depends, File, UploadFile, Form, status
 from fastapi.responses import JSONResponse
 import uvicorn
-from sqlalchemy.orm import Session
 import crud
 from fastapi.staticfiles import StaticFiles
 from typing import List, Optional
 
 from firebase import bucket, db
 
-print(bucket, db)
-# TODO: cloud storage との連携
-# TODO: firestore との連携
-# TODO: 実装
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",
+    "http://localhost",
+    # TODO: フロントエンドデプロイしたらそのURLも入れる
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
