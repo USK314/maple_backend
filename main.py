@@ -37,6 +37,11 @@ async def posts():
     posts = []
     return {"message": "get all posts here", "data": posts}
 
+# [x] herokuに画像をうけとる
+# [ ] それをcloud storageにあげ、
+# [ ] そのパスを取得する
+# [ ] 取得したパスと、ほかのデータを、firestoreに格納する
+# [ ] おわり
 
 @app.post("/post")
 async def post(
