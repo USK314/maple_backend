@@ -26,12 +26,33 @@ app.add_middleware(
 async def root():
     return {"message": "this is root"}
 
+# {
+#     "status": "ok",
+#     "count": "<int>"
+#     "data": [
+#         {
+#             "id": "<int>"
+#             "garigariName": "<string>"
+#             "comment": "<string>"
+#             "lat": "<float>",
+#             "lng": "<float>",
+#             "photoUrl": "<string>",
+#             "genre": "<string>;(セミコロン区切りで複数対応も視野に入れて)"
+#             "favorites": "<int>"
+#         }...
+#     ]
+# }
+
 
 @app.get("/posts")
 async def posts():
-    # posts = crud.get_all_posts(db)
-    posts = []
-    return {"message": "get all posts here", "data": posts}
+    posts = await crud.get_all_posts()
+    resp = {
+        "status": "ok",
+        "count": len(posts),
+        "data": posts
+    }
+    return resp
 
 
 @app.post("/post")

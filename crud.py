@@ -40,9 +40,13 @@ async def save_file_to_cloud_storage(file: UploadFile) -> str:
             status_code=422, detail="\"image/png\" or \"image/jpeg\" のみ受け付けます")
 
 
-def get_all_posts():
-    # TODO: 実装
-    return []
+async def get_all_posts():
+    docs = db.collection("posts").stream()
+    data = []
+    for doc in docs:
+        post = {"id": doc.id, **doc.to_dict()}
+        data.append(post)
+    return data
 
 
 async def create_post(garigari_name: str, comment: str, lat: float, lng: float, image: UploadFile, genre: str):
