@@ -1,14 +1,10 @@
 from fastapi import UploadFile, HTTPException
 import os
 from uuid import uuid4
-import datetime
-from sqlalchemy.orm import Session
 from firebase import bucket
+from firebase import db
+from firebase_admin import firestore
 
-# タスク
-# - 保存のところをちょっと変える→@takapiro99
-# - herokuにデプロイ
-# - githubとherokuのやつをslack又はdiscordと連携
 
 tmp_dir_name = "/tmp" if os.environ.get("DYNO") else "./tmp"
 
@@ -49,7 +45,17 @@ def get_all_posts():
     return []
 
 
-async def create_post(db, garigari_name: str, comment: str, lat: float, lng: float, image: UploadFile, genre: str):
+async def create_post(garigari_name: str, comment: str, lat: float, lng: float, image: UploadFile, genre: str):
     public_url = await save_file_to_cloud_storage(image)
-    # TODO: firestore に格納
+    doc_ref = db.collection('posts').document()
+    doc_ref.set({
+        'garigariName': garigari_name,
+        'imagePath': public_url,
+        'comment': comment,
+        'lat': lat,
+        'lng': lng,
+        'genre': genre,
+        'favorites': 0,
+        'createdAt': firestore.SERVER_TIMESTAMP,
+    })
     return True
