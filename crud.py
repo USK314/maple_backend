@@ -49,6 +49,23 @@ async def get_all_posts():
     return data
 
 
+async def get_new_posts():
+    # posts_ref = db.collection("posts")
+    # query = posts_ref.order_by("createdAt", direction=firestore.Query.DESCENDING).limit(2)
+    # results = query.stream()
+    # return results
+    # streamってなんだ
+    # get_all_postsに合わせるか問題
+    docs = db.collection("posts")
+    query = docs.order_by("createdAt", direction=firestore.Query.DESCENDING).limit(5)
+    results = query.stream()
+    data = []
+    for doc in results:
+        post = {"id": doc.id, **doc.to_dict()}
+        data.append(post)
+    return data
+
+
 async def create_post(garigari_name: str, comment: str, lat: float, lng: float, image: UploadFile, genre: str):
     public_url = await save_file_to_cloud_storage(image)
     doc_ref = db.collection('posts').document()
@@ -75,3 +92,4 @@ async def favorite_to_post(post_id: str):
     current_favorites = data["favorites"]
     # それを更新する
     doc_ref.set({"favorites": current_favorites + 1}, merge=True)
+
