@@ -37,22 +37,26 @@ async def posts():
     }
     return resp
 
+
 @app.get("/new_posts")
 async def new_posts():
     new_posts = await crud.get_new_posts()
     return new_posts
 
+
 @app.post("/post")
 async def post(
-    garigari_name: str = Form(...),
     comment: Optional[str] = None,
     lat: float = Form(...),
     lng: float = Form(...),
     image: UploadFile = File(...),
     genre: str = Form(...),
 ):
-    await crud.create_post(garigari_name, comment, lat, lng, image, genre)
-    return JSONResponse(content={"status": "ok"}, status_code=status.HTTP_201_CREATED)
+    if lat >= -90 and lat <= 90 and lng > -180 and lng <= 180:
+        await crud.create_post(comment, lat, lng, image, genre)
+        return JSONResponse(content={"status": "ok"}, status_code=status.HTTP_201_CREATED)
+    else:
+        return JSONResponse(content={"status": "error", "message": "緯度または経度が不適切です"}, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 @app.post("/favorite")

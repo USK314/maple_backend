@@ -60,11 +60,10 @@ async def get_new_posts():
     return data
 
 
-async def create_post(garigari_name: str, comment: str, lat: float, lng: float, image: UploadFile, genre: str):
+async def create_post(comment: str, lat: float, lng: float, image: UploadFile, genre: str):
     public_url = await save_file_to_cloud_storage(image)
     doc_ref = db.collection('posts').document()
     doc_ref.set({
-        'garigariName': garigari_name,
         'imagePath': public_url,
         'comment': comment,
         'lat': lat,
