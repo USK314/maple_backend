@@ -50,10 +50,9 @@ async def post(
     lat: float = Form(...),
     lng: float = Form(...),
     image: UploadFile = File(...),
-    genre: str = Form(...),
 ):
     if lat >= -90 and lat <= 90 and lng > -180 and lng <= 180:
-        await crud.create_post(comment, lat, lng, image, genre)
+        await crud.create_post(comment, lat, lng, image)
         return JSONResponse(content={"status": "ok"}, status_code=status.HTTP_201_CREATED)
     else:
         return JSONResponse(content={"status": "error", "message": "緯度または経度が不適切です"}, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
