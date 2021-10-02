@@ -11,6 +11,7 @@ origins = [
     "http://localhost:3000",
     "http://localhost",
     "https://garigari-stagram.web.app",
+    "https://maple-maple.web.app"
     # TODO: フロントエンドデプロイしたらそのURLも入れる
 ]
 
