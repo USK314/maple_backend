@@ -50,7 +50,6 @@ async def get_all_posts():
 
 
 async def get_new_posts():
-    # posts_ref = db.collection("posts")
     # query = posts_ref.order_by("createdAt", direction=firestore.Query.DESCENDING).limit(2)
     # results = query.stream()
     # return results
