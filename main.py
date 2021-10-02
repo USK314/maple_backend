@@ -37,6 +37,10 @@ async def posts():
     }
     return resp
 
+@app.get("/new_posts")
+async def new_posts():
+    new_posts = await crud.get_new_posts()
+    return new_posts
 
 @app.post("/post")
 async def post(
