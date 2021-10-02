@@ -10,7 +10,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://localhost",
-    "https://garigari-stagram.web.app/",
+    "https://garigari-stagram.web.app",
     # TODO: フロントエンドデプロイしたらそのURLも入れる
 ]
 
