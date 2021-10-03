@@ -48,7 +48,7 @@ async def new_posts():
 
 @app.post("/post")
 async def post(
-    comment: Optional[str] = None,
+    comment: Optional[str] = Form(...),
     lat: float = Form(...),
     lng: float = Form(...),
     image: UploadFile = File(...),
