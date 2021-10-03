@@ -5,6 +5,7 @@ from firebase import bucket
 from firebase import db
 from firebase_admin import firestore
 import compression
+import vision
 
 
 tmp_dir_name = "/tmp" if os.environ.get("DYNO") else "./tmp"
@@ -62,9 +63,11 @@ async def create_post(comment: str, lat: float, lng: float, image: UploadFile, g
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="\"image/png\" or \"image/jpeg\" のみ受け付けます")
     tmp_path, filename, ext = await save_tmp(image)
-    # TODO: 保存する前に圧縮
     compressed_path = compression.compress(tmp_path, image.content_type)
     # TODO: そして画像認識
+    tags = vision.detect_labels(compressed_path)
+    print("tags was ...", tags)
+
     public_url = await save_file_to_cloud_storage(compressed_path, filename, ext)
     os.remove(compressed_path)
     doc_ref = db.collection('posts').document()
@@ -73,7 +76,7 @@ async def create_post(comment: str, lat: float, lng: float, image: UploadFile, g
         'comment': comment,
         'lat': lat,
         'lng': lng,
-        'genre': genre,
+        'genre': tags,
         'favorites': 0,
         'createdAt': firestore.SERVER_TIMESTAMP,
     })

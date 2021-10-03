@@ -28,6 +28,3 @@ def compress(file_path: str, image_type: str) -> str:
     with open(out_path, mode='wb') as outputfile:
         outputfile.write(im_io.getvalue())
     return out_path
-
-# compress("./景色.jpg", "image/jpeg")
-# compress("./a/サムス.jpg", "image/jpeg")

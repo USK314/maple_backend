@@ -18,6 +18,11 @@ else:
         f.write(json)
     cred_file_path = tmp_cred_file_path
 
+from google.oauth2 import service_account
+
+vision_api_cred = service_account.Credentials.from_service_account_file(cred_file_path)
+
+
 cred = credentials.Certificate(cred_file_path)
 
 if not is_local:

@@ -4,3 +4,5 @@ python-multipart
 aiofiles
 firebase-admin
 Pillow
+google-cloud-vision
+google-auth
